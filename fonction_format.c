@@ -6,42 +6,52 @@
 /*   By: jimi <jimi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:21:20 by jimi              #+#    #+#             */
-/*   Updated: 2024/10/18 14:59:05 by jimi             ###   ########.fr       */
+/*   Updated: 2024/10/21 16:50:36 by jimi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "printflib.h"
 
 // toutes les fonctions qui servent a imprimer tout les formats "%..."
 
 //pour les char // %c //
 
-void	for_char(char c)
+void	for_char(va_list args)
 {
+	char c;
+
+	c = va_arg(args, int);
 	ft_putchar(c);
 }
 
 // pour les str // %s //
 
-void	for_str(char *str)
+void	for_str(va_list args)
 {
+	char *str;
+
+	str = va_arg(args, char *);
 	ft_putstr(str);
 }
 
 //pour les decimeaux et les entiers // %d // %i //
 
-void	for_deci_int(int nb)
+void	for_deci_int(va_list args)
 {
+	int nb;
+
+	nb = va_arg(args, int);
 	ft_putstr(ft_itoa (nb));
 }
 
 //pour les unsigned int // %u //
 
-void	for_un_int(unsigned int nb)
+void	for_un_int(va_list args)
 {
 	int	nombre;
+	unsigned int nb;
 
+	nb = va_arg(args, unsigned int);
 	nombre = (int)nb;
 	ft_putstr(ft_itoa(nombre));
 
@@ -55,19 +65,24 @@ void	for_prcent(void)
 
 //pour les hexa (b16) en maj // %X //
 
-void	FOR_EXA(int nb)
+void	FOR_EXA(va_list args)
 {
+	int nb;
+
+	nb = va_arg(args, int);
 	ft_putstr(ft_itoa_base(nb, 16));
 }
 
 //pour les hexa (b16) en minus // %x //
 
-void for_exa(int nb)
+void for_exa(va_list args)
 {
+	int nb;
 	char *str;
 	int i;
 
 	i = 0;
+	nb = va_arg(args, int);
 	str = ft_itoa_base(nb, 16);
 	while (str[i])
 	{
@@ -75,5 +90,4 @@ void for_exa(int nb)
 		i++;
 	}
 	ft_putstr(str);
-	
 }
