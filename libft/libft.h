@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jimi <jimi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jiparcer <jiparcer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 13:02:42 by jimpa             #+#    #+#             */
-/*   Updated: 2024/10/18 14:19:50 by jimi             ###   ########.fr       */
+/*   Updated: 2024/10/24 16:41:29 by jiparcer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_itoa_base(int n, int base);
+char	*ft_itoa_base_printf(unsigned long value, int base);
 /* fonction pt2 */
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
@@ -68,6 +69,7 @@ char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_itoa(int n);
+char	*ft_unitoa(unsigned int n);
 
 /*fonction bonus*/
 

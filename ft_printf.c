@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jimpa <jimpa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiparcer <jiparcer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:03:59 by jimi              #+#    #+#             */
-/*   Updated: 2024/10/23 22:25:01 by jimpa            ###   ########.fr       */
+/*   Updated: 2024/10/24 15:52:30 by jiparcer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,23 +116,28 @@ int	print_format(va_list *args, char *format, int index)
 		}
 		else if (format[index] == 'u')
 		{
-			for_un_int(args);
+			len = for_un_int(args);
 			return (len);
 		}
 		else if (format[index] == 'x')
 		{
-			for_exa(args);
+			len = for_exa(args);
 			return (len);
 		}
 		else if (format[index] == 'X')
 		{
-			FOR_EXA(args);
+			len = FOR_EXA(args);
 			return (len);
 		}
 		else if (format[index] == '%')
 		{
 			for_prcent();
 			return (1);
+		}
+		else if (format[index] == 'p')
+		{
+			len = for_pointer(args);
+			return (len);
 		}
 		index++;
 	}
@@ -147,7 +152,6 @@ int	ft_printf(const char *str, ...)
 	int nbformat;
 
 	va_start(args, str);
-
 	i = 0;
 	nbformat = 0;
 	len = 0;

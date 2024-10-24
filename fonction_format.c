@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fonction_format.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jimpa <jimpa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiparcer <jiparcer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:21:20 by jimi              #+#    #+#             */
-/*   Updated: 2024/10/23 21:42:04 by jimpa            ###   ########.fr       */
+/*   Updated: 2024/10/24 16:42:44 by jiparcer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,19 @@ void	for_char(va_list *args)
 
 // pour les str // %s //
 
-int for_str(va_list *args) 
+int	for_str(va_list *args)
 {
-    char *str;
-	int len;
-    str = va_arg(*args, char *);
-    if (str == NULL)
-	{
+	char	*str;
+	int		len;
+
+	str = va_arg(*args, char *);
+	if (str == NULL)
 		str = "(null)";
-    }
-    str = ft_strdup(str);
-    if (str == NULL)
-	{
-        return 0;
-    }
-    ft_putstr(str);
+	ft_putstr(str);
 	len = ft_strlen(str);
-	free(str);
-	return(len);
+	return len;
 }
+
 
 
 //pour les decimeaux et les entiers // %d // %i //
@@ -52,23 +46,31 @@ int for_str(va_list *args)
 int	for_deci_int(va_list *args)
 {
 	int nb;
+	int	len;
+	char *result;
 
 	nb = va_arg(*args, int);
-	ft_putstr(ft_itoa (nb));
-	return(ft_strlen(ft_itoa(nb)));
+	result = (ft_itoa (nb));
+	len = ft_strlen(result);
+	ft_putstr(result);
+	free(result);
+	return(len);
 }
 
 //pour les unsigned int // %u //
 
-void	for_un_int(va_list *args)
+int	for_un_int(va_list *args)
 {
-	int	nombre;
-	unsigned int nb;
+	unsigned int	nb;
+	int				len;
+	char			*result;
 
 	nb = va_arg(*args, unsigned int);
-	nombre = (int)nb;
-	ft_putstr(ft_itoa(nombre));
-
+	result = ft_unitoa(nb);
+	len = ft_strlen(result);
+	ft_putstr(result);
+	free(result);
+	return (len);
 }
 //pour les pourcent // %% //
 
@@ -79,17 +81,23 @@ void	for_prcent(void)
 
 //pour les hexa (b16) en maj // %X //
 
-void	FOR_EXA(va_list *args)
+int	FOR_EXA(va_list *args) // pas oublier de free str !!!!
 {
 	int nb;
+	int len;
+	char *result;
 
 	nb = va_arg(*args, int);
-	ft_putstr(ft_itoa_base(nb, 16));
+	result = ft_itoa_base(nb, 16);
+	len = ft_strlen(result);
+	ft_putstr(result);
+	free(result);
+	return (len);
 }
 
 //pour les hexa (b16) en minus // %x //
 
-void for_exa(va_list *args)
+int	for_exa(va_list *args) // pas oublier de free str !!!
 {
 	int nb;
 	char *str;
@@ -104,4 +112,34 @@ void for_exa(va_list *args)
 		i++;
 	}
 	ft_putstr(str);
+	free(str);
+	return (i);
 }
+
+int for_pointer(va_list *args) {
+    void *ptr;
+    char *result;
+    int len;
+    int i;
+
+    ptr = va_arg(*args, void *);
+    if (!ptr) {
+        ft_putstr("0x0");
+        return 3; // "0x0" length
+    }
+
+    ft_putstr("0x");
+    result = ft_itoa_base_printf((unsigned long)ptr, 16);
+    if (!result) return 0;
+
+    i = 0;
+    len = ft_strlen(result) + 2; // Include length of "0x"
+    while (result[i]) {
+        result[i] = ft_tolower(result[i]);
+        i++;
+    }
+    ft_putstr(result);
+    free(result);
+    return len;
+}
+
