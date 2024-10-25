@@ -1,0 +1,145 @@
+#include "ft_printf.h"
+
+int is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+int parse_width(const char *format, int *index) {
+    int width = 0;
+    while (is_digit(format[*index])) {
+        width = width * 10 + (format[*index] - '0');
+        (*index)++;
+    }
+    return width;
+}
+
+int is_width_format(const char *format) {
+    int i = 0;
+    while (format[i]) {
+        if (format[i] == '%') {
+            i++;
+            if (format[i] == '-' || format[i] == '0' || is_digit(format[i])) {
+                if (format[i] == '-' || format[i] == '0') i++;
+                while (is_digit(format[i])) i++;
+                if (format[i] == 'd' || format[i] == 's' || format[i] == 'c' || 
+                    format[i] == 'X' || format[i] == 'x' || format[i] == 'p' || 
+                    format[i] == 'u' || format[i] == 'i' || format[i] == '%') {
+                    return 1;
+                }
+            }
+        }
+        i++;
+    }
+    return 0;
+}
+
+void print_padding(char pad_char, int count) {
+    for (int i = 0; i < count; i++) {
+        ft_putchar(pad_char);
+    }
+}
+
+int print_format(va_list *args, const char *format, int *index) {
+    int width = 0;
+    char pad_char = ' ';
+    int left_align = 0;
+
+    if (format[*index] == '-') {
+        left_align = 1;
+        (*index)++;
+    } else if (format[*index] == '0') {
+        pad_char = '0';
+        (*index)++;
+    }
+
+    if (is_digit(format[*index])) {
+        width = parse_width(format, index);
+    }
+
+    int len = 0;
+    if (format[*index] == 's') {
+        char *str = va_arg(*args, char *);
+        if (!str) str = "(null)";
+        len = ft_strlen(str);
+    } else if (format[*index] == 'd' || format[*index] == 'i') {
+        int num = va_arg(*args, int);
+        char buffer[12];
+        ft_itoa(num, buffer);
+        len = ft_strlen(buffer);
+    } else if (format[*index] == 'c') {
+        len = 1;
+    } else if (format[*index] == 'u') {
+        unsigned int num = va_arg(*args, unsigned int);
+        char buffer[11];
+        ft_utoa(num, buffer);
+        len = ft_strlen(buffer);
+    } else if (format[*index] == 'x') {
+        unsigned int num = va_arg(*args, unsigned int);
+        char buffer[9];
+        ft_xtoa(num, buffer, 0);
+        len = ft_strlen(buffer);
+    } else if (format[*index] == 'X') {
+        unsigned int num = va_arg(*args, unsigned int);
+        char buffer[9];
+        ft_xtoa(num, buffer, 1);
+        len = ft_strlen(buffer);
+    } else if (format[*index] == '%') {
+        len = 1;
+    }
+
+    if (!left_align && width > len) {
+        print_padding(pad_char, width - len);
+    }
+
+    if (format[*index] == 's') {
+        ft_putstr(va_arg(*args, char *));
+    } else if (format[*index] == 'd' || format[*index] == 'i') {
+        char buffer[12];
+        ft_itoa(va_arg(*args, int), buffer);
+        ft_putstr(buffer);
+    } else if (format[*index] == 'c') {
+        ft_putchar((char) va_arg(*args, int));
+    } else if (format[*index] == 'u') {
+        char buffer[11];
+        ft_utoa(va_arg(*args, unsigned int), buffer);
+        ft_putstr(buffer);
+    } else if (format[*index] == 'x') {
+        char buffer[9];
+        ft_xtoa(va_arg(*args, unsigned int), buffer, 0);
+        ft_putstr(buffer);
+    } else if (format[*index] == 'X') {
+        char buffer[9];
+        ft_xtoa(va_arg(*args, unsigned int), buffer, 1);
+        ft_putstr(buffer);
+    } else if (format[*index] == '%') {
+        ft_putchar('%');
+    }
+
+    if (left_align && width > len) {
+        print_padding(' ', width - len);
+    }
+
+    return len;
+}
+
+int ft_printf(const char *str, ...) {
+    va_list args;
+    va_start(args, str);
+    int printed_chars = 0;
+    int index = 0;
+
+    while (str[index]) {
+        if (str[index] == '%' && str[index + 1]) {
+            index++;
+            printed_chars += print_format(&args, str, &index);
+            index++;
+        } else {
+            ft_putchar(str[index]);
+            printed_chars++;
+            index++;
+        }
+    }
+
+    va_end(args);
+    return printed_chars;
+}
