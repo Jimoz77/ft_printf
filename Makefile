@@ -1,45 +1,32 @@
-NAME			=	libftprintf.a
+SRCS = ft_printf.c fonction_format.c fonction_format2.c ./libft/ft_strlen.c ./libft/ft_itoa.c ./libft/ft_putchar.c ./libft/ft_putstr.c ./libft/ft_itoa_base.c ./libft/ft_unitoa.c ./libft/ft_itoa_base_printf.c ./libft/ft_tolower.c
+OBJECTS = ${SRCS:.c=.o}
+HEADERS = ft_printf.h
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -I.
+NAME = libftprintf.a
+LIBC = ar rcs
+LIBFT_PATH = ./libft
+LIBFT = $(LIBFT_PATH)/libft.a
 
-CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror
-AR				=	ar
-ARFLAGS 		=	rcs
-RM				=	rm -rf
-
-SRC				=	ft_printf fonction_format fonction_format2
-SRCS 			=	$(addsuffix .c, $(SRC))
-
-OBJ_DIR			=	obj
-OBJS			=	$(SRCS:%.c=$(OBJ_DIR)/%.o)
-
-LIBFT_PATH		=	./libft
-LIBFT			=	$(LIBFT_PATH)/libft.a
-
-$(OBJ_DIR)/%.o:		%.c
-					$(CC) $(CFLAGS) -c $< -o $@
-
-all:				$(NAME)
-
-bonus:				all
-
-$(NAME):			$(LIBFT) $(OBJ_DIR) $(OBJS)
-				cp	$(LIBFT) $(NAME)
-					$(AR) $(ARFLAGS) $(NAME) $(OBJS)
+all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-					make -C $(LIBFT_PATH) all
+	cd $(LIBFT_PATH) && make
 
-$(OBJ_DIR):
-					mkdir -p $(OBJ_DIR)
+$(NAME): $(LIBFT) $(OBJECTS)
+	$(LIBC) $(NAME) $(OBJECTS) $(LIBFT)
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-					make -C $(LIBFT_PATH) clean
-					$(RM) $(OBJ_DIR)
+	make -C $(LIBFT_PATH) clean
+	rm -f $(OBJECTS)
 
-fclean:				clean
-					make -C $(LIBFT_PATH) fclean
-					$(RM) $(NAME)
+fclean: clean
+	make -C $(LIBFT_PATH) fclean
+	rm -f $(NAME)
 
-re:					fclean all
+re: fclean all
 
-.PHONY:				all bonus clean fclean re libft
+.PHONY: all re clean fclean
